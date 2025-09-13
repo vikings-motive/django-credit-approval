@@ -9,3 +9,4 @@ python-dateutil>=2.9
 gunicorn>=21.2
 python-dotenv>=1.0
 drf-yasg>=1.21
+django-cors-headers>=4.0
