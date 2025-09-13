@@ -6,3 +6,89 @@ implementation_plan.md
 assignment_files/
 Backend Assignment.pdf
 Backend Internship Assignment.zip
+
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+staticfiles/
+static/
+media/
+
+# Celery
+celery.pid
+celerybeat.pid
+celerybeat-schedule
+
+# Tests & coverage
+.pytest_cache/
+.tox/
+.nox/
+.coverage
+.coverage.*
+htmlcov/
+junit*.xml
+coverage.xml
+
+# Type checkers / linters caches
+.mypy_cache/
+.pytype/
+.pyre/
+.ruff_cache/
+.pyright/
+
+# Editors & IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# OS cruft
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Env files (secrets)
+.env
+.env.*
+
+# Docker overrides
+docker-compose.override.yml
+*.local.yml
+
+# Build/packaging artifacts
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+wheels/
+share/python-wheels/
+MANIFEST
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Project data (keep folder, ignore large/local files)
+data/*.xlsx
+data/*.xls
+data/*.csv
+data/*.parquet
+data/*.db
+
+# Root-level data files provided by assignment
+customer_data.xlsx
+loan_data.xlsx
