@@ -63,6 +63,14 @@ A simple Django-based REST API for managing customer loans and credit approvals.
    >>> ingest_data()  # Sync
    ```
 
+## API Documentation
+
+### Swagger/OpenAPI Documentation
+Interactive API documentation is available at:
+- Swagger UI: `http://localhost:8000/swagger/` or `http://localhost:8000/`
+- ReDoc: `http://localhost:8000/redoc/`
+- OpenAPI Schema: `http://localhost:8000/swagger.json`
+
 ## API Endpoints
 
 ### 1. Register Customer
@@ -112,6 +120,12 @@ A simple Django-based REST API for managing customer loans and credit approvals.
 ### 5. View Customer's Active Loans
 - **URL**: `/view-loans/<customer_id>`
 - **Method**: GET
+
+### 6. Health Check Endpoints
+- **Basic Health**: `/health/` - Simple health status
+- **Detailed Health**: `/health/detailed/` - Checks all dependencies (DB, Redis, Celery)
+- **Readiness Check**: `/health/ready/` - Kubernetes readiness probe
+- **Liveness Check**: `/health/live/` - Kubernetes liveness probe
 
 ## Business Logic
 
@@ -166,4 +180,47 @@ docker compose logs worker
 
 # Database logs
 docker compose logs db
+
+# Follow logs in real-time
+docker compose logs -f web worker
 ```
+
+## Recent Improvements
+
+### Testing
+- ✅ Comprehensive test coverage for all business rules
+- ✅ Edge case testing (boundary values, invalid inputs)
+- ✅ Concurrent loan creation testing
+- ✅ Credit score component testing
+- ✅ Interest rate correction validation
+
+### API Documentation
+- ✅ Swagger/OpenAPI integration with drf-yasg
+- ✅ Interactive API testing interface
+- ✅ Auto-generated API documentation
+
+### Data Validation
+- ✅ Enhanced input validation with detailed error messages
+- ✅ Name validation (letters only)
+- ✅ Phone number sanitization
+- ✅ Cross-field validation for loans
+- ✅ Boundary value checks
+
+### Monitoring & Health
+- ✅ Comprehensive logging configuration
+- ✅ Health check endpoints for all services
+- ✅ Kubernetes-ready health probes
+- ✅ Service dependency monitoring
+
+### Docker Optimization
+- ✅ Multi-stage build for smaller images
+- ✅ Non-root user for security
+- ✅ Health checks for all containers
+- ✅ Optimized dependency caching
+- ✅ Log volume persistence
+
+### Security
+- ✅ Non-root container execution
+- ✅ Input sanitization
+- ✅ Environment variable configuration
+- ✅ Secure defaults
