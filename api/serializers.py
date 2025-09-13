@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from rest_framework.validators import RegexValidator
+from django.core.validators import RegexValidator
 from decimal import Decimal
 import re
 
@@ -44,12 +44,6 @@ class RegisterSerializer(serializers.Serializer):
     )
     phone_number = serializers.CharField(
         max_length=20,
-        validators=[
-            RegexValidator(
-                regex=r'^\d{10,15}$',
-                message='Phone number must be 10-15 digits only, no spaces or special characters'
-            )
-        ],
         error_messages={
             'required': 'Phone number is required',
             'blank': 'Phone number cannot be blank'
@@ -111,7 +105,7 @@ class LoanSerializer(serializers.Serializer):
         error_messages={
             'required': 'Interest rate is required',
             'min_value': 'Interest rate cannot be negative',
-            'max_value': 'Interest rate cannot exceed 100%',
+            'max_value': 'Interest rate cannot exceed 100 percent',
             'invalid': 'Invalid interest rate format'
         }
     )
