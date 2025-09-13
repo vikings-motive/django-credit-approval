@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path
+from django.conf import settings
+from django.conf.urls.static import static
 from api import views
 from api import health
 from rest_framework import permissions
@@ -58,3 +60,7 @@ urlpatterns = [
     path('health/ready/', health.readiness_check, name='health-ready'),
     path('health/live/', health.liveness_check, name='health-live'),
 ]
+
+# Serve static files in development
+if settings.DEBUG or True:  # Always serve static files for this demo
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
