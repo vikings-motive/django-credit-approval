@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Approval System - All Routes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        .route-list {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .route {
+            margin: 10px 0;
+            padding: 10px;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        .method {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .method-get {
+            background-color: #28a745;
+            color: white;
+        }
+        .method-post {
+            background-color: #007bff;
+            color: white;
+        }
+        .endpoint {
+            font-family: monospace;
+            color: #333;
+            font-size: 14px;
+        }
+        .description {
+            color: #666;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .health-check {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        .healthy {
+            background-color: #28a745;
+            color: white;
+        }
+        .unhealthy {
+            background-color: #dc3545;
+            color: white;
+        }
+        .section {
+            margin-top: 30px;
+        }
+        .link-button {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            margin: 5px;
+        }
+        .link-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <h1>Credit Approval System - Complete API Routes</h1>
+    
+    <div class="container">
+        <h2>🗺️ All Available Routes</h2>
+        <div class="route-list">
+            <h3>API Endpoints</h3>
+            <div class="route">
+                <span class="method method-post">POST</span>
+                <span class="endpoint">/register</span>
+                <div class="description">Register a new customer. Calculates approved credit limit (36 × monthly income)</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-post">POST</span>
+                <span class="endpoint">/check-eligibility</span>
+                <div class="description">Check loan eligibility based on credit score and business rules</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-post">POST</span>
+                <span class="endpoint">/create-loan</span>
+                <div class="description">Create a new loan if eligible (with automatic interest rate correction)</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/view-loan/{loan_id}</span>
+                <div class="description">View details of a specific loan</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/view-loans/{customer_id}</span>
+                <div class="description">View all active loans for a customer</div>
+            </div>
+            
+            <h3>Health Check Endpoints</h3>
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/health/</span>
+                <div class="description">Basic health check</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/health/detailed/</span>
+                <div class="description">Detailed health check (DB, Redis, Celery)</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/health/ready/</span>
+                <div class="description">Kubernetes readiness probe</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/health/live/</span>
+                <div class="description">Kubernetes liveness probe</div>
+            </div>
+            
+            <h3>Documentation Endpoints</h3>
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/</span>
+                <div class="description">API documentation (Swagger UI)</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/swagger/</span>
+                <div class="description">Swagger UI interface</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/redoc/</span>
+                <div class="description">ReDoc interface</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/swagger.json</span>
+                <div class="description">OpenAPI schema (JSON)</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/swagger.yaml</span>
+                <div class="description">OpenAPI schema (YAML)</div>
+            </div>
+            
+            <div class="route">
+                <span class="method method-get">GET</span>
+                <span class="endpoint">/admin/</span>
+                <div class="description">Django admin interface</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container section">
+        <h2>🏥 System Health Status</h2>
+        <button onclick="checkHealth()">Check Basic Health</button>
+        <button onclick="checkDetailedHealth()">Check Detailed Health</button>
+        <button onclick="checkReadiness()">Check Readiness</button>
+        <button onclick="checkLiveness()">Check Liveness</button>
+        <div id="healthResults"></div>
+    </div>
+
+    <div class="container section">
+        <h2>📚 Documentation Links</h2>
+        <a href="http://localhost:8000/" class="link-button" target="_blank">Swagger UI</a>
+        <a href="http://localhost:8000/redoc/" class="link-button" target="_blank">ReDoc</a>
+        <a href="http://localhost:8000/swagger.json" class="link-button" target="_blank">OpenAPI JSON</a>
+        <a href="http://localhost:8000/swagger.yaml" class="link-button" target="_blank">OpenAPI YAML</a>
+        <a href="http://localhost:8000/admin/" class="link-button" target="_blank">Admin Interface</a>
+    </div>
+
+    <div class="container section">
+        <h2>🧪 Test API Endpoints</h2>
+        <button onclick="testRegisterFlow()">Test Complete Registration Flow</button>
+        <button onclick="testCreditScoreScenarios()">Test Credit Score Scenarios</button>
+        <button onclick="getRandomCustomerLoans()">Get Random Customer's Loans</button>
+        <div id="testResults" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        // Health check functions
+        async function checkHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health/`);
+                const data = await response.json();
+                displayHealthResult('Basic Health', data, response.ok);
+            } catch (error) {
+                displayHealthResult('Basic Health', {error: error.message}, false);
+            }
+        }
+
+        async function checkDetailedHealth() {
+            try {
+                const response = await fetch(`${API_BASE}/health/detailed/`);
+                const data = await response.json();
+                displayHealthResult('Detailed Health', data, response.ok);
+            } catch (error) {
+                displayHealthResult('Detailed Health', {error: error.message}, false);
+            }
+        }
+
+        async function checkReadiness() {
+            try {
+                const response = await fetch(`${API_BASE}/health/ready/`);
+                const data = await response.json();
+                displayHealthResult('Readiness', data, response.ok);
+            } catch (error) {
+                displayHealthResult('Readiness', {error: error.message}, false);
+            }
+        }
+
+        async function checkLiveness() {
+            try {
+                const response = await fetch(`${API_BASE}/health/live/`);
+                const data = await response.json();
+                displayHealthResult('Liveness', data, response.ok);
+            } catch (error) {
+                displayHealthResult('Liveness', {error: error.message}, false);
+            }
+        }
+
+        function displayHealthResult(type, data, isHealthy) {
+            const resultsDiv = document.getElementById('healthResults');
+            const statusClass = isHealthy ? 'healthy' : 'unhealthy';
+            const statusText = isHealthy ? 'HEALTHY' : 'UNHEALTHY';
+            
+            resultsDiv.innerHTML += `
+                <div class="health-check ${statusClass}">
+                    ${type}: ${statusText}
+                </div>
+                <pre>${JSON.stringify(data, null, 2)}</pre>
+            `;
+        }
+
+        // Test functions
+        async function testRegisterFlow() {
+            const results = document.getElementById('testResults');
+            results.innerHTML = 'Testing complete registration flow...\n\n';
+            
+            try {
+                // Generate unique data
+                const timestamp = Date.now();
+                const phoneNumber = `9${timestamp.toString().slice(-9)}`;
+                
+                // 1. Register customer
+                results.innerHTML += '1. Registering customer...\n';
+                const registerData = {
+                    first_name: "Test",
+                    last_name: "Customer",
+                    age: 35,
+                    monthly_income: 75000,
+                    phone_number: phoneNumber
+                };
+                
+                const registerResponse = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(registerData)
+                });
+                const customer = await registerResponse.json();
+                results.innerHTML += `✅ Customer registered: ID ${customer.customer_id}, Approved Limit: ₹${customer.approved_limit}\n\n`;
+                
+                // 2. Check eligibility
+                results.innerHTML += '2. Checking loan eligibility...\n';
+                const eligibilityData = {
+                    customer_id: customer.customer_id,
+                    loan_amount: 500000,
+                    interest_rate: 10,
+                    tenure: 24
+                };
+                
+                const eligibilityResponse = await fetch(`${API_BASE}/check-eligibility`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(eligibilityData)
+                });
+                const eligibility = await eligibilityResponse.json();
+                results.innerHTML += `✅ Eligibility: ${eligibility.approval ? 'Approved' : 'Rejected'}, Interest Rate: ${eligibility.corrected_interest_rate}%\n\n`;
+                
+                // 3. Create loan
+                results.innerHTML += '3. Creating loan...\n';
+                const loanData = {
+                    customer_id: customer.customer_id,
+                    loan_amount: 300000,
+                    interest_rate: 12,
+                    tenure: 12
+                };
+                
+                const loanResponse = await fetch(`${API_BASE}/create-loan`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(loanData)
+                });
+                const loan = await loanResponse.json();
+                results.innerHTML += `✅ Loan: ${loan.loan_approved ? 'Approved' : 'Rejected'} - ${loan.message}\n`;
+                if (loan.loan_id) {
+                    results.innerHTML += `   Loan ID: ${loan.loan_id}\n\n`;
+                    
+                    // 4. View loan details
+                    results.innerHTML += '4. Viewing loan details...\n';
+                    const loanDetailsResponse = await fetch(`${API_BASE}/view-loan/${loan.loan_id}`);
+                    const loanDetails = await loanDetailsResponse.json();
+                    results.innerHTML += `✅ Loan Details:\n${JSON.stringify(loanDetails, null, 2)}\n\n`;
+                }
+                
+                // 5. View customer loans
+                results.innerHTML += '5. Viewing customer loans...\n';
+                const customerLoansResponse = await fetch(`${API_BASE}/view-loans/${customer.customer_id}`);
+                const customerLoans = await customerLoansResponse.json();
+                results.innerHTML += `✅ Customer has ${customerLoans.length} active loans\n`;
+                
+            } catch (error) {
+                results.innerHTML += `\n❌ Error: ${error.message}\n`;
+            }
+        }
+
+        async function testCreditScoreScenarios() {
+            const results = document.getElementById('testResults');
+            results.innerHTML = 'Testing different credit score scenarios...\n\n';
+            
+            try {
+                // Test different interest rate scenarios
+                const scenarios = [
+                    {desc: "High credit score (>50)", interest: 8},
+                    {desc: "Medium credit score (30-50)", interest: 10},
+                    {desc: "Low credit score (10-30)", interest: 14}
+                ];
+                
+                // Use a known customer ID (from previous tests)
+                const customerId = 303; // Jane Smith from our demo
+                
+                for (const scenario of scenarios) {
+                    results.innerHTML += `Testing: ${scenario.desc} with ${scenario.interest}% interest\n`;
+                    
+                    const response = await fetch(`${API_BASE}/check-eligibility`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            customer_id: customerId,
+                            loan_amount: 100000,
+                            interest_rate: scenario.interest,
+                            tenure: 12
+                        })
+                    });
+                    
+                    const data = await response.json();
+                    results.innerHTML += `  Result: ${data.approval ? 'Approved' : 'Rejected'}, `;
+                    results.innerHTML += `Corrected Rate: ${data.corrected_interest_rate}%\n\n`;
+                }
+            } catch (error) {
+                results.innerHTML += `\n❌ Error: ${error.message}\n`;
+            }
+        }
+
+        async function getRandomCustomerLoans() {
+            const results = document.getElementById('testResults');
+            results.innerHTML = 'Getting loans for customer ID 303 (Jane Smith)...\n\n';
+            
+            try {
+                const response = await fetch(`${API_BASE}/view-loans/303`);
+                const loans = await response.json();
+                
+                if (response.ok) {
+                    results.innerHTML += `Found ${loans.length} active loans:\n\n`;
+                    loans.forEach((loan, index) => {
+                        results.innerHTML += `Loan ${index + 1}:\n`;
+                        results.innerHTML += JSON.stringify(loan, null, 2) + '\n\n';
+                    });
+                } else {
+                    results.innerHTML += `Error: ${JSON.stringify(loans, null, 2)}\n`;
+                }
+            } catch (error) {
+                results.innerHTML += `\n❌ Error: ${error.message}\n`;
+            }
+        }
+
+        // Check health on page load
+        window.onload = function() {
+            checkHealth();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Credit Approval System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        input, button {
+            margin: 5px 0;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 200px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            padding: 10px 20px;
+            border: none;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        .form-group {
+            margin: 10px 0;
+        }
+        label {
+            display: inline-block;
+            width: 150px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Credit Approval System</h1>
+    
+    <div class="container">
+        <h2>1. Register Customer</h2>
+        <div class="form-group">
+            <label>First Name:</label>
+            <input type="text" id="firstName" placeholder="John">
+        </div>
+        <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" id="lastName" placeholder="Doe">
+        </div>
+        <div class="form-group">
+            <label>Age:</label>
+            <input type="number" id="age" placeholder="30">
+        </div>
+        <div class="form-group">
+            <label>Monthly Income:</label>
+            <input type="number" id="monthlyIncome" placeholder="50000">
+        </div>
+        <div class="form-group">
+            <label>Phone Number:</label>
+            <input type="text" id="phoneNumber" placeholder="9876543210">
+        </div>
+        <button onclick="registerCustomer()">Register Customer</button>
+        <div id="registerResult" class="result"></div>
+    </div>
+
+    <div class="container">
+        <h2>2. Check Loan Eligibility</h2>
+        <div class="form-group">
+            <label>Customer ID:</label>
+            <input type="number" id="eligCustomerId" placeholder="1">
+        </div>
+        <div class="form-group">
+            <label>Loan Amount:</label>
+            <input type="number" id="eligLoanAmount" placeholder="500000">
+        </div>
+        <div class="form-group">
+            <label>Interest Rate (%):</label>
+            <input type="number" id="eligInterestRate" placeholder="10.5" step="0.1">
+        </div>
+        <div class="form-group">
+            <label>Tenure (months):</label>
+            <input type="number" id="eligTenure" placeholder="24">
+        </div>
+        <button onclick="checkEligibility()">Check Eligibility</button>
+        <div id="eligibilityResult" class="result"></div>
+    </div>
+
+    <div class="container">
+        <h2>3. Create Loan</h2>
+        <div class="form-group">
+            <label>Customer ID:</label>
+            <input type="number" id="loanCustomerId" placeholder="1">
+        </div>
+        <div class="form-group">
+            <label>Loan Amount:</label>
+            <input type="number" id="loanAmount" placeholder="200000">
+        </div>
+        <div class="form-group">
+            <label>Interest Rate (%):</label>
+            <input type="number" id="loanInterestRate" placeholder="15" step="0.1">
+        </div>
+        <div class="form-group">
+            <label>Tenure (months):</label>
+            <input type="number" id="loanTenure" placeholder="12">
+        </div>
+        <button onclick="createLoan()">Create Loan</button>
+        <div id="loanResult" class="result"></div>
+    </div>
+
+    <div class="container">
+        <h2>4. View Customer's Loans</h2>
+        <div class="form-group">
+            <label>Customer ID:</label>
+            <input type="number" id="viewCustomerId" placeholder="1">
+        </div>
+        <button onclick="viewCustomerLoans()">View Loans</button>
+        <div id="customerLoansResult" class="result"></div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8000';
+
+        async function registerCustomer() {
+            const data = {
+                first_name: document.getElementById('firstName').value,
+                last_name: document.getElementById('lastName').value,
+                age: parseInt(document.getElementById('age').value),
+                monthly_income: parseInt(document.getElementById('monthlyIncome').value),
+                phone_number: document.getElementById('phoneNumber').value
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('registerResult').innerHTML = 
+                        `<span class="success">Customer registered successfully!</span>\n` +
+                        `Customer ID: ${result.customer_id}\n` +
+                        `Name: ${result.name}\n` +
+                        `Approved Limit: ₹${result.approved_limit.toLocaleString('en-IN')}`;
+                } else {
+                    document.getElementById('registerResult').innerHTML = 
+                        `<span class="error">Error: ${JSON.stringify(result, null, 2)}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('registerResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        async function checkEligibility() {
+            const data = {
+                customer_id: parseInt(document.getElementById('eligCustomerId').value),
+                loan_amount: parseInt(document.getElementById('eligLoanAmount').value),
+                interest_rate: parseFloat(document.getElementById('eligInterestRate').value),
+                tenure: parseInt(document.getElementById('eligTenure').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/check-eligibility`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('eligibilityResult').innerHTML = 
+                        `Approval: ${result.approval ? '<span class="success">Approved</span>' : '<span class="error">Not Approved</span>'}\n` +
+                        `Interest Rate: ${result.interest_rate}%\n` +
+                        `Corrected Interest Rate: ${result.corrected_interest_rate}%\n` +
+                        `Monthly Installment: ₹${parseFloat(result.monthly_installment).toLocaleString('en-IN')}`;
+                } else {
+                    document.getElementById('eligibilityResult').innerHTML = 
+                        `<span class="error">Error: ${JSON.stringify(result, null, 2)}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('eligibilityResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        async function createLoan() {
+            const data = {
+                customer_id: parseInt(document.getElementById('loanCustomerId').value),
+                loan_amount: parseInt(document.getElementById('loanAmount').value),
+                interest_rate: parseFloat(document.getElementById('loanInterestRate').value),
+                tenure: parseInt(document.getElementById('loanTenure').value)
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/create-loan`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok || response.status === 201) {
+                    if (result.loan_approved) {
+                        document.getElementById('loanResult').innerHTML = 
+                            `<span class="success">Loan approved!</span>\n` +
+                            `Loan ID: ${result.loan_id}\n` +
+                            `Message: ${result.message}`;
+                    } else {
+                        document.getElementById('loanResult').innerHTML = 
+                            `<span class="error">Loan not approved</span>\n` +
+                            `Message: ${result.message}`;
+                    }
+                } else {
+                    document.getElementById('loanResult').innerHTML = 
+                        `<span class="error">Error: ${JSON.stringify(result, null, 2)}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('loanResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+
+        async function viewCustomerLoans() {
+            const customerId = document.getElementById('viewCustomerId').value;
+
+            try {
+                const response = await fetch(`${API_BASE}/view-loans/${customerId}`);
+                const result = await response.json();
+                
+                if (response.ok) {
+                    if (Array.isArray(result) && result.length > 0) {
+                        let loansHtml = `<strong>Active Loans (${result.length}):</strong>\n\n`;
+                        result.forEach(loan => {
+                            loansHtml += `Loan ID: ${loan.loan_id}\n` +
+                                        `Amount: ₹${parseFloat(loan.loan_amount).toLocaleString('en-IN')}\n` +
+                                        `Interest Rate: ${loan.interest_rate}%\n` +
+                                        `Tenure: ${loan.tenure} months\n` +
+                                        `Monthly EMI: ₹${parseFloat(loan.monthly_installment).toLocaleString('en-IN')}\n` +
+                                        `Start Date: ${loan.start_date}\n` +
+                                        `End Date: ${loan.end_date}\n\n`;
+                        });
+                        document.getElementById('customerLoansResult').innerHTML = loansHtml;
+                    } else {
+                        document.getElementById('customerLoansResult').innerHTML = 
+                            'No active loans found for this customer.';
+                    }
+                } else {
+                    document.getElementById('customerLoansResult').innerHTML = 
+                        `<span class="error">Error: ${JSON.stringify(result, null, 2)}</span>`;
+                }
+            } catch (error) {
+                document.getElementById('customerLoansResult').innerHTML = 
+                    `<span class="error">Error: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
