@@ -1,6 +1,7 @@
 from celery import shared_task
 import pandas as pd
 from datetime import datetime
+from django.db import connection
 from .models import Customer, Loan
 
 
@@ -92,5 +93,26 @@ def ingest_data():
     except Exception as e:
         print(f"Error loading loans: {e}")
         return f"Failed to load loans: {e}"
+    
+    # Reset PostgreSQL sequences to prevent PK conflicts
+    # This ensures new records created via API don't conflict with ingested IDs
+    try:
+        with connection.cursor() as cursor:
+            # Reset Customer ID sequence
+            cursor.execute("""
+                SELECT setval(pg_get_serial_sequence('api_customer', 'id'), 
+                       COALESCE((SELECT MAX(id) FROM api_customer), 1), true);
+            """)
+            print("Reset Customer ID sequence")
+            
+            # Reset Loan ID sequence
+            cursor.execute("""
+                SELECT setval(pg_get_serial_sequence('api_loan', 'id'), 
+                       COALESCE((SELECT MAX(id) FROM api_loan), 1), true);
+            """)
+            print("Reset Loan ID sequence")
+    except Exception as e:
+        print(f"Warning: Could not reset sequences: {e}")
+        # Non-fatal error - ingestion succeeded but sequences might need manual reset
     
     return "Data ingestion completed successfully"

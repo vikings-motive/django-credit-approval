@@ -122,11 +122,11 @@ A simple Django-based REST API for managing customer loans and credit approvals.
 - If current debt > approved limit: score = 0
 
 ### Loan Approval Rules
-- Credit Score > 50: Approve with any interest rate
-- 30 < Score ≤ 50: Minimum 12% interest rate
-- 10 < Score ≤ 30: Minimum 16% interest rate
-- Score ≤ 10: Reject loan
-- Total EMIs must not exceed 50% of monthly salary
+- If credit_rating > 50: Approve loan with any interest rate
+- If 50 > credit_rating > 30: Approve loans with interest rate > 12%
+- If 30 > credit_rating > 10: Approve loans with interest rate > 16%
+- If 10 > credit_rating: Don't approve any loans
+- If sum of all current EMIs > 50% of monthly salary: Don't approve any loans
 
 ### EMI Calculation
 Uses compound interest formula:
