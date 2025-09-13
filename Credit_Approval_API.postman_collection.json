@@ -1,0 +1,541 @@
+{
+  "info": {
+    "name": "Credit Approval System API",
+    "description": "Complete API test collection for Credit Approval System. This collection includes all endpoints with various test scenarios.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8000",
+      "type": "string"
+    },
+    {
+      "key": "customer_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "loan_id",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health Checks",
+      "item": [
+        {
+          "name": "Basic Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/",
+              "host": ["{{base_url}}"],
+              "path": ["health", ""]
+            }
+          }
+        },
+        {
+          "name": "Detailed Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health/detailed/",
+              "host": ["{{base_url}}"],
+              "path": ["health", "detailed", ""]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customer Registration",
+      "item": [
+        {
+          "name": "Register Customer - Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "    pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has customer_id\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('customer_id');",
+                  "    pm.environment.set(\"customer_id\", jsonData.customer_id);",
+                  "});",
+                  "",
+                  "pm.test(\"Approved limit is calculated correctly\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    var expectedLimit = Math.round(50000 * 36 / 100000) * 100000;",
+                  "    pm.expect(jsonData.approved_limit).to.eql(expectedLimit);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"John\",\n  \"last_name\": \"Doe\",\n  \"age\": 30,\n  \"monthly_income\": 50000,\n  \"phone_number\": \"9876543210\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            }
+          }
+        },
+        {
+          "name": "Register Customer - Invalid Phone",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});",
+                  "",
+                  "pm.test(\"Error message for phone_number\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('phone_number');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Jane\",\n  \"last_name\": \"Smith\",\n  \"age\": 25,\n  \"monthly_income\": 60000,\n  \"phone_number\": \"123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            }
+          }
+        },
+        {
+          "name": "Register Customer - Missing Fields",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"first_name\": \"Alice\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/register",
+              "host": ["{{base_url}}"],
+              "path": ["register"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Loan Eligibility",
+      "item": [
+        {
+          "name": "Check Eligibility - Good Credit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has all required fields\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('approval');",
+                  "    pm.expect(jsonData).to.have.property('monthly_installment');",
+                  "    pm.expect(jsonData).to.have.property('corrected_interest_rate');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"loan_amount\": 200000,\n  \"interest_rate\": 10.5,\n  \"tenure\": 12\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/check-eligibility",
+              "host": ["{{base_url}}"],
+              "path": ["check-eligibility"]
+            }
+          }
+        },
+        {
+          "name": "Check Eligibility - Low Interest Rate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Interest rate is corrected\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.corrected_interest_rate).to.be.at.least(jsonData.interest_rate);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"loan_amount\": 500000,\n  \"interest_rate\": 5,\n  \"tenure\": 24\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/check-eligibility",
+              "host": ["{{base_url}}"],
+              "path": ["check-eligibility"]
+            }
+          }
+        },
+        {
+          "name": "Check Eligibility - Invalid Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": 99999,\n  \"loan_amount\": 100000,\n  \"interest_rate\": 10,\n  \"tenure\": 12\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/check-eligibility",
+              "host": ["{{base_url}}"],
+              "path": ["check-eligibility"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Loan Creation",
+      "item": [
+        {
+          "name": "Create Loan - Valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201 or 200\", function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "var jsonData = pm.response.json();",
+                  "if (jsonData.loan_approved) {",
+                  "    pm.test(\"Loan is approved\", function () {",
+                  "        pm.expect(jsonData.loan_approved).to.be.true;",
+                  "        pm.environment.set(\"loan_id\", jsonData.loan_id);",
+                  "    });",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"loan_amount\": 100000,\n  \"interest_rate\": 12,\n  \"tenure\": 12\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/create-loan",
+              "host": ["{{base_url}}"],
+              "path": ["create-loan"]
+            }
+          }
+        },
+        {
+          "name": "Create Loan - Exceeds Limit",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Loan is rejected\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.loan_approved).to.be.false;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"loan_amount\": 5000000,\n  \"interest_rate\": 10,\n  \"tenure\": 60\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/create-loan",
+              "host": ["{{base_url}}"],
+              "path": ["create-loan"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "View Loans",
+      "item": [
+        {
+          "name": "View Specific Loan",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has loan details\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.have.property('loan_id');",
+                  "    pm.expect(jsonData).to.have.property('customer');",
+                  "    pm.expect(jsonData).to.have.property('loan_amount');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/view-loan/{{loan_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["view-loan", "{{loan_id}}"]
+            }
+          }
+        },
+        {
+          "name": "View Customer Loans",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response is an array\", function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/view-loans/{{customer_id}}",
+              "host": ["{{base_url}}"],
+              "path": ["view-loans", "{{customer_id}}"]
+            }
+          }
+        },
+        {
+          "name": "View Loans - Invalid Customer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 404\", function () {",
+                  "    pm.response.to.have.status(404);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/view-loans/99999",
+              "host": ["{{base_url}}"],
+              "path": ["view-loans", "99999"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Edge Cases",
+      "item": [
+        {
+          "name": "Zero Loan Amount",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"loan_amount\": 0,\n  \"interest_rate\": 10,\n  \"tenure\": 12\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/check-eligibility",
+              "host": ["{{base_url}}"],
+              "path": ["check-eligibility"]
+            }
+          }
+        },
+        {
+          "name": "Negative Interest Rate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 400\", function () {",
+                  "    pm.response.to.have.status(400);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customer_id\": {{customer_id}},\n  \"loan_amount\": 100000,\n  \"interest_rate\": -5,\n  \"tenure\": 12\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/check-eligibility",
+              "host": ["{{base_url}}"],
+              "path": ["check-eligibility"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

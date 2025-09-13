@@ -1,6 +1,7 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, throttle_classes
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from datetime import date
 from dateutil.relativedelta import relativedelta
 from django.db import transaction
@@ -40,6 +41,7 @@ logger = logging.getLogger('api')
     operation_description="Register a new customer. Approved limit = 36 * monthly_income (rounded to nearest lakh)"
 )
 @api_view(['POST'])
+@throttle_classes([AnonRateThrottle])
 def register(request):
     """
     Register a new customer.
@@ -147,6 +149,7 @@ def _check_loan_eligibility(customer_id, loan_amount, interest_rate, tenure):
 
 
 @api_view(['POST'])
+@throttle_classes([AnonRateThrottle])
 def check_eligibility(request):
     """
     Check loan eligibility based on credit score.
@@ -193,6 +196,7 @@ def check_eligibility(request):
 
 
 @api_view(['POST'])
+@throttle_classes([AnonRateThrottle])
 def create_loan(request):
     """
     Create a new loan if eligible.
