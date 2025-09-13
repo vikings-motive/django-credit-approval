@@ -10,6 +10,12 @@ A simple Django-based REST API for managing customer loans and credit approvals.
 - View loan details and active loans
 - Background data ingestion from Excel files
 
+## Demo
+
+![Credit Approval System Demo](docs/demo-screenshot.png)
+
+*Screenshot from the application demo video showing the system in action*
+
 ## Tech Stack
 
 - Django 4.2+
