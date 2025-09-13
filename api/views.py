@@ -357,6 +357,9 @@ def view_loans(request, customer_id):
             'loan_amount': loan.loan_amount,
             'interest_rate': loan.interest_rate,
             'monthly_installment': loan.monthly_repayment,
+            'tenure': loan.tenure,
+            'start_date': loan.start_date.isoformat(),
+            'end_date': loan.end_date.isoformat(),
             'repayments_left': repayments_left
         })
     
