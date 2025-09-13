@@ -5,12 +5,40 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from django.db import transaction
 from decimal import Decimal
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
+import logging
 
 from .models import Customer, Loan
 from .serializers import RegisterSerializer, LoanSerializer
 from .helpers import calculate_credit_score, calculate_monthly_installment, round_to_lakh
 
+# Get logger for this module
+logger = logging.getLogger('api')
 
+
+@swagger_auto_schema(
+    method='post',
+    request_body=RegisterSerializer,
+    responses={
+        201: openapi.Response(
+            description="Customer registered successfully",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'customer_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'name': openapi.Schema(type=openapi.TYPE_STRING),
+                    'age': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'monthly_income': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'approved_limit': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'phone_number': openapi.Schema(type=openapi.TYPE_STRING),
+                }
+            )
+        ),
+        400: "Invalid input data"
+    },
+    operation_description="Register a new customer. Approved limit = 36 * monthly_income (rounded to nearest lakh)"
+)
 @api_view(['POST'])
 def register(request):
     """
